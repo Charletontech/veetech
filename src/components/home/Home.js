@@ -66,7 +66,7 @@ const Home = () => {
             }
             return options
         }
-        var response = await fetch('/post-event-request', fetchOptions('POST', formData));
+        var response = await fetch('https://osele-tickets-server.onrender.com/post-event-request', fetchOptions('POST', formData));
         if (response.status === 200) {
             const Toast = Swal.mixin({
                 toast: true,
