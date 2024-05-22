@@ -63,7 +63,6 @@ const Home = () => {
                     'Authorization': `Bearer 123`,
                 }),
                 body: BODY,
-            credentials: 'include'
             }
             return options
         }
