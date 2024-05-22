@@ -4,7 +4,24 @@ import { CartContext } from '../../App';
 
 function TicketsContainer({ type }) {
   const { cart } = useContext(CartContext);
-  const fdata = [
+ 
+  const [products, setProducts] = useState([]);
+
+  const configureAllEvents = useCallback((receivedData) => {
+    setProducts(receivedData);
+  }, []);
+
+  const configureLatestEvents = useCallback((receivedData) => {
+    const latestEvents = receivedData.filter((each) => {
+      const currentDatePlus1Month = futureDate(new Date(), 'months', 1);
+      const eventDate = new Date(each.date);
+      return currentDatePlus1Month.getTime() > eventDate.getTime();
+    });
+    setProducts(latestEvents);
+  }, []);
+
+  useEffect(() => {
+     const fdata = [
     {
       id: 1,
       owner: 'Ay',
@@ -27,22 +44,6 @@ function TicketsContainer({ type }) {
     },
   ];
 
-  const [products, setProducts] = useState([]);
-
-  const configureAllEvents = useCallback((receivedData) => {
-    setProducts(receivedData);
-  }, []);
-
-  const configureLatestEvents = useCallback((receivedData) => {
-    const latestEvents = receivedData.filter((each) => {
-      const currentDatePlus1Month = futureDate(new Date(), 'months', 1);
-      const eventDate = new Date(each.date);
-      return currentDatePlus1Month.getTime() > eventDate.getTime();
-    });
-    setProducts(latestEvents);
-  }, []);
-
-  useEffect(() => {
     if (type === "All Events") {
       configureAllEvents(fdata);
     } else {
