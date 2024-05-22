@@ -53,6 +53,8 @@ const Signup = () => {
       case 6:
         formData.type = inputValue
         break;
+      default:
+        break
     }
   }
 
