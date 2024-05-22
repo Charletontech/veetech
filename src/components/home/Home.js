@@ -62,7 +62,8 @@ const Home = () => {
                 headers: new Headers({
                     'Authorization': `Bearer 123`,
                 }),
-                body: BODY
+                body: BODY,
+            credentials: 'include'
             }
             return options
         }
