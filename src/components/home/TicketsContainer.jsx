@@ -49,7 +49,7 @@ function TicketsContainer({ type }) {
     } else {
       configureLatestEvents(fdata);
     }
-  }, [type, cart, fdata, configureAllEvents, configureLatestEvents]);
+  }, [type, cart, configureAllEvents, configureLatestEvents]);
 
   function futureDate(date, type, amount) {
     const newDate = new Date(date);
