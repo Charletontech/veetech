@@ -2,7 +2,6 @@ import Cart from "../Cart"
 import Heading from "./Heading"
 import Navbar from "./Navbar"
 import TicketsContainer from "./TicketsContainer"
-import { useState } from "react";
 import Swal from "sweetalert2";
 
 const Home = () => {
@@ -195,7 +194,7 @@ const Home = () => {
 
             <footer>
                     <div className="footerGenCont">
-                        <img src="/osele-logo-w.png" />
+                        <img src="/osele-logo-w.png" alt="img" />
                         <div className="footerCont">
                             <div className="footer-column">
                                 <h4>Contact Us</h4>
