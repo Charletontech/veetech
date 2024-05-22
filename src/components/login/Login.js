@@ -35,6 +35,8 @@ function Login() {
       case 2:
         formData.password = inputValue;
         break;
+      default:
+        break
     }
   }
   
