@@ -1,94 +1,80 @@
-import React from 'react'
-import {useEffect, useState, useContext} from 'react'
+import React, { useEffect, useState, useContext, useCallback } from 'react';
 import Ticket from './Ticket';
-import { CartContext } from '../../App'; 
-function TicketsContainer({type}) { 
-    var {cart} = useContext(CartContext);
-  var fdata = [{
-    id: 1,
-    owner: 'Ay',
-    eventName: 'AY live show - Lagos',
-    noOfGuests: 300,
-    flyer: '/hero.jpg',
-    date: '2024/5/29',
-    price: {regular: '2000', vip: '4000', vvip: '6000', table: '10000'},
-    rating: 7
-  },
-  {
-    id: 2,
-    owner: 'Akpororo',
-    eventName: 'Night of a thousand laughter',
-    noOfGuests: 500,
-    flyer: '/hero.jpg',
-    date: '2024/7/29',
-    price: {regular: '4000', vip: '4000', vvip: '6000', table: '1000000'},
-    rating: 8
-  }
-  ]; 
+import { CartContext } from '../../App';
 
- 
+function TicketsContainer({ type }) {
+  const { cart } = useContext(CartContext);
+  const fdata = [
+    {
+      id: 1,
+      owner: 'Ay',
+      eventName: 'AY live show - Lagos',
+      noOfGuests: 300,
+      flyer: '/hero.jpg',
+      date: '2024/5/29',
+      price: { regular: '2000', vip: '4000', vvip: '6000', table: '10000' },
+      rating: 7,
+    },
+    {
+      id: 2,
+      owner: 'Akpororo',
+      eventName: 'Night of a thousand laughter',
+      noOfGuests: 500,
+      flyer: '/hero.jpg',
+      date: '2024/7/29',
+      price: { regular: '4000', vip: '4000', vvip: '6000', table: '1000000' },
+      rating: 8,
+    },
+  ];
 
-  var [products, setProducts] = useState([]);
- 
-  
+  const [products, setProducts] = useState([]);
+
+  const configureAllEvents = useCallback((receivedData) => {
+    setProducts(receivedData);
+  }, []);
+
+  const configureLatestEvents = useCallback((receivedData) => {
+    const latestEvents = receivedData.filter((each) => {
+      const currentDatePlus1Month = futureDate(new Date(), 'months', 1);
+      const eventDate = new Date(each.date);
+      return currentDatePlus1Month.getTime() > eventDate.getTime();
+    });
+    setProducts(latestEvents);
+  }, []);
+
   useEffect(() => {
     if (type === "All Events") {
       configureAllEvents(fdata);
-    }else{
+    } else {
       configureLatestEvents(fdata);
     }
-    
-  }, [cart])
+  }, [type, cart, fdata, configureAllEvents, configureLatestEvents]);
 
-  const configureAllEvents = (receivedData) => {
-    setProducts(receivedData)
-  }
-
-  const configureLatestEvents = (receivedData) => {
-    var latestEvents = []
-    receivedData.forEach(each => {
-      var currentDatePlus1Month = futureDate(new Date(), 'months', 1)
-      var eventDate = new Date(each.date)
-      if (currentDatePlus1Month.getTime() > eventDate.getTime()) {
-        latestEvents.push(each);
-      }
-    });
-    setProducts(latestEvents);
-  }
-  
-  
- 
   function futureDate(date, type, amount) {
-    const newDate = new Date(date)
+    const newDate = new Date(date);
     switch (type) {
       case 'days':
         newDate.setDate(newDate.getDate() + amount);
         break;
       case 'weeks':
-        newDate.setDate(newDate.getDate() + (amount * 7));
-        break
+        newDate.setDate(newDate.getDate() + amount * 7);
+        break;
       case 'months':
         newDate.setMonth(newDate.getMonth() + amount);
         break;
-    
       default:
         break;
     }
-
     return newDate;
   }
 
   return (
     <div className='ticketsContainer'>
-      {
-        products.map(each => {
-          return <Ticket tickets={each} products={products} />
-          
-        })
-      }
-    </div> 
-  )
+      {products.map((each) => (
+        <Ticket key={each.id} tickets={each} products={products} />
+      ))}
+    </div>
+  );
 }
 
-
-export default TicketsContainer
+export default TicketsContainer;
