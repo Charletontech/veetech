@@ -270,7 +270,7 @@ const Signup = () => {
   return (
     <div className='formCont'>
       <form className='signup-login-form'>
-       {num > 5 ?  <h1></h1> :  <h1>Signup Form</h1>}
+       {num > 5 ?  <h1>&nbsp;</h1> :  <h1>Signup Form</h1>}
         {num > 5 ?
          <h1>Signup Success!</h1> : 
          fields[num]
