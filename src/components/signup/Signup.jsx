@@ -54,7 +54,7 @@ const Signup = () => {
         formData.type = inputValue
         break;
       default:
-        break
+          break
     }
   }
 
@@ -109,8 +109,8 @@ const Signup = () => {
     }
 
     //validate full name
-    if (/[,.\/'-]/.test(formData.fName)) {
-      formData.fName = formData.fName.replace(/[,.\/'-]/g, "");
+    if (/[,./'-]/.test(formData.fName)) {
+      formData.fName = formData.fName.replace(/[,./'-]/g, "");
     }
     var fulName = formData.fName.split(" ");
     if (fulName.length < 3) {
