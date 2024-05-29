@@ -78,6 +78,7 @@ function Cart() {
     if (sessionExists) {
       try {
         var newCartData = [cart, sessionExists, total]
+        // https://osele-tickets-server.onrender.com
         var response = await fetch('https://osele-tickets-server.onrender.com/checkout', FetchRequestOptions('POST', newCartData))
       if (response.status === 200) {
         const Toast = Swal.mixin({
@@ -150,9 +151,9 @@ function Cart() {
         </div>
         <div className="cart-content">
           {
-            cart.map(item => { 
+            cart.map((item, index )=> { 
               return(
-                <div className="cart-row">
+                <div key={index} className="cart-row">
                   <img src="/hero.jpg" alt="" />
                   <div className="prod-details">
                     <h3>{item.eventName.length < 28? item.eventName : item.eventName.slice(0, 20) + '...'} </h3>

@@ -1,5 +1,4 @@
 import  './Home.css'
-import fetchOptions  from "../FetchRequestOptions";
 import { useState, useEffect, useContext } from "react";
 import { CartContext } from "../../App";
 

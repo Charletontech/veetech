@@ -53,6 +53,8 @@ const Signup = () => {
       case 6:
         formData.type = inputValue
         break;
+      default:
+          break
     }
   }
 
@@ -107,8 +109,8 @@ const Signup = () => {
     }
 
     //validate full name
-    if (/[,.\/'-]/.test(formData.fName)) {
-      formData.fName = formData.fName.replace(/[,.\/'-]/g, "");
+    if (/[,./'-]/.test(formData.fName)) {
+      formData.fName = formData.fName.replace(/[,./'-]/g, "");
     }
     var fulName = formData.fName.split(" ");
     if (fulName.length < 3) {
@@ -268,7 +270,7 @@ const Signup = () => {
   return (
     <div className='formCont'>
       <form className='signup-login-form'>
-       {num > 5 ?  <h1></h1> :  <h1>Signup Form</h1>}
+       {num > 5 ?  <h1>&nbsp;</h1> :  <h1>Signup Form</h1>}
         {num > 5 ?
          <h1>Signup Success!</h1> : 
          fields[num]

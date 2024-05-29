@@ -12,7 +12,7 @@ const formData = {
 
 
 function Login() {
-  var {setUserData, setIsLoggedIn} = useContext(CartContext)
+  var {setUserData, setIsLoggedIn, setIsAdmin} = useContext(CartContext)
   var count = 0
   var [num, setNum] = useState(count);
   const navigate = useNavigate();
@@ -35,6 +35,8 @@ function Login() {
       case 2:
         formData.password = inputValue;
         break;
+      default:
+        break
     }
   }
   
@@ -75,18 +77,23 @@ function Login() {
     }
 
     //send login request
+    // https://osele-tickets-server.onrender.com/login
     fetch('https://osele-tickets-server.onrender.com/login', FetchRequestOptions('POST', formData))
-    
     .then(res => res.json()
     .then( res.status === 200 ? indicateLoginSuccess() : indicateLoginFailed())
     )
     .then(data => {
-      setUserData(data);
-      setIsLoggedIn(true)
-      navigate('/dashboard');
+      if (data === "Admin detected") {
+        setIsAdmin(true)
+        navigate('/admin');
+      } else {
+        setUserData(data);
+        setIsLoggedIn(true)
+        navigate('/dashboard');
+        //save user id to browser localStorage 
+        localStorage.setItem('oseleTicketsUser', JSON.stringify({user: data.phone}))
+      }
 
-      //save user id to browser localStorage 
-      localStorage.setItem('oseleTicketsUser', JSON.stringify({user: data.phone}))
     })
     .catch(err => console.error(err))
       function indicateLoginSuccess() {

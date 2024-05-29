@@ -5,6 +5,7 @@ import { createContext, useState } from "react";
 import Dashboard from './components/dashboard/Dashboard';
 import Signup from "./components/signup/Signup";
 import Login from './components/login/Login';
+import Admin from './components/admin/Admin';
 export const CartContext = createContext();
 
 
@@ -12,8 +13,9 @@ function App() {
   var [total, setTotal] = useState(0)
   const [cart, setCart] = useState([]);
   const [toggleCart, setToggleCart] = useState(false);
-  const [userData, setUserData] = useState([])
+  const [userData, setUserData] = useState(null)
   const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [isAdmin, setIsAdmin] = useState(false)
 
 
   const calcTotal = () => {
@@ -25,14 +27,15 @@ function App() {
   }
   
   return (
-      <CartContext.Provider value={{cart, setCart, toggleCart, setToggleCart, total, setTotal, calcTotal, isLoggedIn, setIsLoggedIn, userData, setUserData}} >
+      <CartContext.Provider value={{cart, setCart, toggleCart, setToggleCart, total, setTotal, calcTotal, isLoggedIn, setIsLoggedIn, userData, setUserData, setIsAdmin}} >
         <Router>
           <Routes>
             {/* Use logical operators to conditionally render routes */}
             {window.location.pathname === '/' && <Route exact path="/" element={<Home />} />}
             <Route path="/signup" element={<Signup />} />
             <Route path="/dashboard" element={isLoggedIn? <Dashboard /> : <Login />} />
-            <Route path="/login" element={<Login />} /> 
+            <Route path="/admin" element={isAdmin? <Admin /> : <Login />} />
+            <Route path="/login" element={<Login />} />
             {/* If no routes match, render NotFound component */}
             {/* <Route path="*" element={<NotFound />} /> */}
           </Routes>

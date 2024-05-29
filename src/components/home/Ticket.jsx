@@ -20,7 +20,7 @@ function Ticket({tickets, products}) {
           });
           return
         } else {
-          const productToAdd = products.find(product => product.id === prodId);
+          const productToAdd =  products.find(product => product.id === prodId);
           if (productToAdd) {
             productToAdd.price = price;
             productToAdd.qty = 1
@@ -48,24 +48,24 @@ function Ticket({tickets, products}) {
       calcTotal()
   return (
     <div className="eventCont" key={tickets.id}>
-        <img src={tickets.flyer} alt="" />
+        <img src={products? tickets.flyer : ""} alt="" />
         <div className="cartIcon-ticketType-cont">
         <div className={"ticketType" + (showTicketTypes ? " showTicket" : "")} >
-            <div className="ticket" onClick={() => addToCart(tickets.id, tickets.price.regular)}>
+            <div className="ticket" onClick={products? () => addToCart(tickets.id, JSON.parse(tickets.ticketPrices)[0].regular) : alert('loading tickets')}>
             <div className='ticketTypeName'><p><svg style={{ fill: "black" }}  xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M480-280q17 0 28.5-11.5T520-320q0-17-11.5-28.5T480-360q-17 0-28.5 11.5T440-320q0 17 11.5 28.5T480-280Zm0-160q17 0 28.5-11.5T520-480q0-17-11.5-28.5T480-520q-17 0-28.5 11.5T440-480q0 17 11.5 28.5T480-440Zm0-160q17 0 28.5-11.5T520-640q0-17-11.5-28.5T480-680q-17 0-28.5 11.5T440-640q0 17 11.5 28.5T480-600Zm320 440H160q-33 0-56.5-23.5T80-240v-160q33 0 56.5-23.5T160-480q0-33-23.5-56.5T80-560v-160q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720v160q-33 0-56.5 23.5T800-480q0 33 23.5 56.5T880-400v160q0 33-23.5 56.5T800-160Zm0-80v-102q-37-22-58.5-58.5T720-480q0-43 21.5-79.5T800-618v-102H160v102q37 22 58.5 58.5T240-480q0 43-21.5 79.5T160-342v102h640ZM480-480Z"/></svg></p><b>Regular</b></div>
-            <button>N{tickets.price.regular}</button>
+            <button>N{products? JSON.parse(tickets.ticketPrices)[0].regular : "Loading..."}</button>
             </div>
-            <div className="ticket" onClick={() => addToCart(tickets.id, tickets.price.vip)}>
+            <div className="ticket" onClick={products? () => addToCart(tickets.id, JSON.parse(tickets.ticketPrices)[0].vip) : alert('loading tickets')}>
             <div className='ticketTypeName'><p><svg style={{ fill: "black" }}  xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M480-280q17 0 28.5-11.5T520-320q0-17-11.5-28.5T480-360q-17 0-28.5 11.5T440-320q0 17 11.5 28.5T480-280Zm0-160q17 0 28.5-11.5T520-480q0-17-11.5-28.5T480-520q-17 0-28.5 11.5T440-480q0 17 11.5 28.5T480-440Zm0-160q17 0 28.5-11.5T520-640q0-17-11.5-28.5T480-680q-17 0-28.5 11.5T440-640q0 17 11.5 28.5T480-600Zm320 440H160q-33 0-56.5-23.5T80-240v-160q33 0 56.5-23.5T160-480q0-33-23.5-56.5T80-560v-160q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720v160q-33 0-56.5 23.5T800-480q0 33 23.5 56.5T880-400v160q0 33-23.5 56.5T800-160Zm0-80v-102q-37-22-58.5-58.5T720-480q0-43 21.5-79.5T800-618v-102H160v102q37 22 58.5 58.5T240-480q0 43-21.5 79.5T160-342v102h640ZM480-480Z"/></svg></p><b>VIP</b></div>
-            <button>N{tickets.price.vip}</button>
+            <button>N{products? JSON.parse(tickets.ticketPrices)[0].vip : "Loading..."}</button>
             </div>
-            <div className="ticket" onClick={() => addToCart(tickets.id, tickets.price.vvip)}>
+            <div className="ticket" onClick={products? () => addToCart(tickets.id, JSON.parse(tickets.ticketPrices)[0].vvip) : alert('loading tickets')}>
             <div className='ticketTypeName'><p><svg style={{ fill: "black" }}  xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M480-280q17 0 28.5-11.5T520-320q0-17-11.5-28.5T480-360q-17 0-28.5 11.5T440-320q0 17 11.5 28.5T480-280Zm0-160q17 0 28.5-11.5T520-480q0-17-11.5-28.5T480-520q-17 0-28.5 11.5T440-480q0 17 11.5 28.5T480-440Zm0-160q17 0 28.5-11.5T520-640q0-17-11.5-28.5T480-680q-17 0-28.5 11.5T440-640q0 17 11.5 28.5T480-600Zm320 440H160q-33 0-56.5-23.5T80-240v-160q33 0 56.5-23.5T160-480q0-33-23.5-56.5T80-560v-160q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720v160q-33 0-56.5 23.5T800-480q0 33 23.5 56.5T880-400v160q0 33-23.5 56.5T800-160Zm0-80v-102q-37-22-58.5-58.5T720-480q0-43 21.5-79.5T800-618v-102H160v102q37 22 58.5 58.5T240-480q0 43-21.5 79.5T160-342v102h640ZM480-480Z"/></svg></p><b>VVIP</b></div>
-            <button>N{tickets.price.vvip}</button>
+            <button>N{products? JSON.parse(tickets.ticketPrices)[0].vvip : "Loading..."}</button>
             </div>
-            <div className="ticket" onClick={() => addToCart(tickets.id, tickets.price.table)}>
+            <div className="ticket" onClick={products? () => addToCart(tickets.id, JSON.parse(tickets.ticketPrices)[0].table) : alert('loading tickets')}>
             <div className='ticketTypeName'><p><svg style={{ fill: "black" }}  xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M480-280q17 0 28.5-11.5T520-320q0-17-11.5-28.5T480-360q-17 0-28.5 11.5T440-320q0 17 11.5 28.5T480-280Zm0-160q17 0 28.5-11.5T520-480q0-17-11.5-28.5T480-520q-17 0-28.5 11.5T440-480q0 17 11.5 28.5T480-440Zm0-160q17 0 28.5-11.5T520-640q0-17-11.5-28.5T480-680q-17 0-28.5 11.5T440-640q0 17 11.5 28.5T480-600Zm320 440H160q-33 0-56.5-23.5T80-240v-160q33 0 56.5-23.5T160-480q0-33-23.5-56.5T80-560v-160q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720v160q-33 0-56.5 23.5T800-480q0 33 23.5 56.5T880-400v160q0 33-23.5 56.5T800-160Zm0-80v-102q-37-22-58.5-58.5T720-480q0-43 21.5-79.5T800-618v-102H160v102q37 22 58.5 58.5T240-480q0 43-21.5 79.5T160-342v102h640ZM480-480Z"/></svg></p><b>Table</b></div>
-            <button>N{tickets.price.table}</button>
+            <button>N{products? JSON.parse(tickets.ticketPrices)[0].table : "Loading..."}</button>
             </div>
         </div>
        
@@ -76,11 +76,11 @@ function Ticket({tickets, products}) {
         </div>
         
         <div className="starCont">
-            <p> {tickets.rating}/10</p>
+            <p> {products? tickets.starRating : "Loading..."}/10</p>
             <svg  width="18px" height="18px" viewBox="0 0 24 24" fill="#fbcd00" xmlns="http://www.w3.org/2000/svg"><path d="M9.15316 5.40838C10.4198 3.13613 11.0531 2 12 2C12.9469 2 13.5802 3.13612 14.8468 5.40837L15.1745 5.99623C15.5345 6.64193 15.7144 6.96479 15.9951 7.17781C16.2757 7.39083 16.6251 7.4699 17.3241 7.62805L17.9605 7.77203C20.4201 8.32856 21.65 8.60682 21.9426 9.54773C22.2352 10.4886 21.3968 11.4691 19.7199 13.4299L19.2861 13.9372C18.8096 14.4944 18.5713 14.773 18.4641 15.1177C18.357 15.4624 18.393 15.8341 18.465 16.5776L18.5306 17.2544C18.7841 19.8706 18.9109 21.1787 18.1449 21.7602C17.3788 22.3417 16.2273 21.8115 13.9243 20.7512L13.3285 20.4768C12.6741 20.1755 12.3469 20.0248 12 20.0248C11.6531 20.0248 11.3259 20.1755 10.6715 20.4768L10.0757 20.7512C7.77268 21.8115 6.62118 22.3417 5.85515 21.7602C5.08912 21.1787 5.21588 19.8706 5.4694 17.2544L5.53498 16.5776C5.60703 15.8341 5.64305 15.4624 5.53586 15.1177C5.42868 14.773 5.19043 14.4944 4.71392 13.9372L4.2801 13.4299C2.60325 11.4691 1.76482 10.4886 2.05742 9.54773C2.35002 8.60682 3.57986 8.32856 6.03954 7.77203L6.67589 7.62805C7.37485 7.4699 7.72433 7.39083 8.00494 7.17781C8.28555 6.96479 8.46553 6.64194 8.82547 5.99623L9.15316 5.40838Z" fill="#fbcd00"/></svg>
             {/* <svg style={{fill: '#fbcd00'}} xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 -960 960 960" width="18px" fill="#fbcd00"><path d="m384-334 96-74 96 74-36-122 90-64H518l-38-124-38 124H330l90 64-36 122ZM233-120l93-304L80-600h304l96-320 96 320h304L634-424l93 304-247-188-247 188Zm247-369Z"/></svg> */}
         </div>
-        <h4>{tickets.eventName}</h4>
+        <h4>{products? tickets.eventName : "Loading..."}</h4>
     </div>
   )
 }

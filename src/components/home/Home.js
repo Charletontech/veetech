@@ -2,23 +2,31 @@ import Cart from "../Cart"
 import Heading from "./Heading"
 import Navbar from "./Navbar"
 import TicketsContainer from "./TicketsContainer"
-import { useState } from "react";
 import Swal from "sweetalert2";
+import GetRequestOptions from "../GetRequestOptions";
 
 const Home = () => {
-    // var [formData, setFormData] = useState(new FormData());
     var formData = new FormData();
-    formData.append('owner', "");
+    formData.append('organizer', "");
     formData.append('eventName', "");
     formData.append('noOfGuests', "");
     formData.append('flyer', "");
     formData.append('date', "");
     formData.append('price', "");
+    formData.append('venue', "");
+    formData.append('email', "");
+
+    const initDB = () => {
+        fetch('https://oseletickets.netlify.app/db-init', GetRequestOptions('GET'))
+        .then(res => res.json())
+        .then(data => alert(data))
+        .catch(err => alert(err))
+      }
     
     const handleForm = (e) => {
         switch (e.target.name) {
-            case 'owner':
-                formData.set('owner', `${e.target.value}`);
+            case 'organizer':
+                formData.set('organizer', `${e.target.value}`);
                 break;
             case 'eventName':
                 formData.set('eventName', `${e.target.value}`);
@@ -35,6 +43,12 @@ const Home = () => {
             case 'price':
                 formData.set('price', `${e.target.value}`);
                 break;
+            case 'venue':
+                formData.set('venue', `${e.target.value}`);
+                break;
+            case 'email':
+                formData.set('email', `${e.target.value}`);
+                break;
         
             default:
                 break;
@@ -47,45 +61,70 @@ const Home = () => {
 
     const animateSubmitBtn = async (e) => {
         // animate submit button
+        e.target.innerHTML = 'Sending request...'
         e.target.style.transition = 'all 0.3s'
         e.target.addEventListener('mousedown',  ()=> {
             e.target.style.transform = 'scale(0.8)'
+            e.target.style.background = 'white'
         })
         e.target.addEventListener('mouseup', ()=> {
             e.target.style.transform = 'scale(1)'
+            e.target.style.background = '#f6006d'
         })
 
                
         // submit form
-        const fetchOptions = (METHOD, BODY) => {
-            var options = {
-                method: `${METHOD}`,
-                headers: new Headers({
-                    'Authorization': `Bearer 123`,
-                }),
-                body: BODY
-            }
-            return options
-        }
-        var response = await fetch('https://osele-tickets-server.onrender.com/post-event-request', fetchOptions('POST', formData));
-        if (response.status === 200) {
-            const Toast = Swal.mixin({
-                toast: true,
-                position: "top",
-                showConfirmButton: true,
-                timer: 8000,
-                timerProgressBar: true,
-                didOpen: (toast) => {
-                  toast.onmouseenter = Swal.stopTimer;
-                  toast.onmouseleave = Swal.resumeTimer;
+        try {
+            const fetchOptions = (METHOD, BODY) => {
+                var options = {
+                    method: `${METHOD}`,
+                    headers: new Headers({
+                        'Authorization': `Bearer 123`,
+                    }),
+                    body: BODY
                 }
-              });
-              Toast.fire({
-                icon: "success",
-                title: "Sent!",
-                text: "Your event has been sent to us. We will reach out to you via your mail soon.",
-              });
-        } else {
+                return options
+            }
+            var response = await fetch('https://osele-tickets-server.onrender.com/post-event-request', fetchOptions('POST', formData));
+            if (response.status === 200) {
+                e.target.innerHTML = "Submit"
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: "top",
+                    showConfirmButton: true,
+                    timer: 8000,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                      toast.onmouseenter = Swal.stopTimer;
+                      toast.onmouseleave = Swal.resumeTimer;
+                    }
+                  });
+                  Toast.fire({
+                    icon: "success",
+                    title: "Sent!",
+                    text: "Your event has been sent to us. We will reach out to you via your mail soon.",
+                  });
+            } else {
+                e.target.innerHTML = "Submit"
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: "top",
+                    showConfirmButton: true,
+                    timer: 8000,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                      toast.onmouseenter = Swal.stopTimer;
+                      toast.onmouseleave = Swal.resumeTimer;
+                    }
+                  });
+                  Toast.fire({
+                    icon: "error",
+                    title: "Oops!",
+                    text: "An error occurred. Your event was unable to be sent. Please try again.",
+                  }); 
+            }
+        } catch (error) {
+            e.target.innerHTML = "Submit"
             const Toast = Swal.mixin({
                 toast: true,
                 position: "top",
@@ -102,12 +141,10 @@ const Home = () => {
                 title: "Oops!",
                 text: "An error occurred. Your event was unable to be sent. Please try again.",
               }); 
+            console.log("Error message: ", error)
         }
+        
     }
-    
-    
-    
-
 
     return(
         <>
@@ -137,8 +174,8 @@ const Home = () => {
             </div>
             
             <section id="Latest-events">
-            <Heading title={"Latest Events"} />
-            <TicketsContainer type={"latest Events"} />
+                <Heading title={"Latest Events"} />
+                <TicketsContainer type={"latest Events"} />
             </section>
 
             <section id="events">
@@ -159,8 +196,8 @@ const Home = () => {
                         <form onSubmit={submitForm} className="eventform">
                             <div className="formGroup">
                                 <div>
-                                    <label>Event owner</label>
-                                    <input type="text" name="owner" onChange={handleForm} />
+                                    <label>Event organizer</label>
+                                    <input type="text" name="organizer" onChange={handleForm} />
                                 </div>
                                 <div>
                                     <label>Name of event</label>
@@ -170,10 +207,18 @@ const Home = () => {
                                     <label>Event date</label>
                                     <input type="date" name="date" onChange={handleForm} />
                                 </div>
+                                <div>
+                                    <label>Venue of event</label>
+                                    <input type="text" name="venue" onChange={handleForm} />
+                                </div>
                                 <button onClick={animateSubmitBtn} className="submitBtn" type="submit">Submit</button>
                             </div>
                 
                             <div className="formGroup">
+                                <div>
+                                    <label>Organizer contact email</label>
+                                    <input type="email" name="email" onChange={handleForm}/>
+                                </div>
                                 <div>
                                     <label>Number of guests</label>
                                     <input type="number" name="noOfGuests" onChange={handleForm}/>
@@ -195,7 +240,7 @@ const Home = () => {
 
             <footer>
                     <div className="footerGenCont">
-                        <img src="/osele-logo-w.png" />
+                        <img src="/osele-logo-w.png" alt="img" />
                         <div className="footerCont">
                             <div className="footer-column">
                                 <h4>Contact Us</h4>
@@ -204,7 +249,7 @@ const Home = () => {
                                 <p>+2349000000000</p>
                             </div>
                             <div className="footer-column">
-                                <h4>Site Map</h4>
+                                <h4 onClick={initDB}>Site Map</h4>
                                 <p><a href="#events">Buy tickets</a></p>
                                 <p><a href="#events">Latest events</a></p>
                                 <p><a href="#events">Post event</a></p>

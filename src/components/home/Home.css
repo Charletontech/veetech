@@ -285,7 +285,7 @@ nav ul li a:hover{
 }
 
 .headerBg{
-    width: 7rem;
+    width: 8.2rem;
     height: 2.5rem;
     border-radius: 6px;
     background-color: var(--pink);
@@ -295,7 +295,7 @@ nav ul li a:hover{
 }
 
 .headerContent{
-    width: 7rem;
+    width: 8.2rem;
     height: 2.5rem;
     border-radius: 6px;
     background-color: var(--pink);

@@ -6,8 +6,8 @@ import Swal from "sweetalert2";
 function Dashboard() {
   var [showMenu, setShowMenu] = useState(false);
   var { userData } = useContext(CartContext);
-  var fullName = userData.fullName;
-  var [firstN, middleN, lastN] = [...fullName.split(" ")];
+  var fullName = userData? userData[0].fullName : "...";
+  var firstN = userData? fullName.split(" ")[0] : "..."; 
 
   const showAccountDetails = () => {
     Swal.fire({
@@ -18,9 +18,9 @@ function Dashboard() {
             <div style="text-align: center; ">
                 <p style="margin-bottom: 0.5rem;">Make a transfer into the following account to fund your wallet. Your transfer will reflect in your balance within minutes.</p>
                 <b style="color: #ff2e8c;">Account number</b>
-                <p  style="margin-bottom: 0.5rem;"> ${userData.account} </p>
+                <p  style="margin-bottom: 0.5rem;"> ${userData[0].account} </p>
                 <b  style="color: #ff2e8c;">Account Name</b>
-                <p  style="margin-bottom: 0.5rem;">${userData.fullName}</p>
+                <p  style="margin-bottom: 0.5rem;">${userData[0].fullName}</p>
                 <b  style="color:#ff2e8c;">Bank</b>
                 <br>
                 <p>Hope PSB</p>
@@ -36,7 +36,7 @@ function Dashboard() {
   return (
     <div className="dashboardMainFrame">
       <div className="dashboardHeader">
-        <img src="/osele-logo.png" />
+        <img src="/osele-logo.png" alt="img" />
         <div>
           <p onClick={showAccountDetails}>
            <svg style={{ fill: "black" }} xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M560-440q-50 0-85-35t-35-85q0-50 35-85t85-35q50 0 85 35t35 85q0 50-35 85t-85 35ZM280-320q-33 0-56.5-23.5T200-400v-320q0-33 23.5-56.5T280-800h560q33 0 56.5 23.5T920-720v320q0 33-23.5 56.5T840-320H280Zm80-80h400q0-33 23.5-56.5T840-480v-160q-33 0-56.5-23.5T760-720H360q0 33-23.5 56.5T280-640v160q33 0 56.5 23.5T360-400Zm440 240H120q-33 0-56.5-23.5T40-240v-440h80v440h680v80ZM280-400v-320 320Z"/></svg>
@@ -154,65 +154,37 @@ function Dashboard() {
                   <svg style={{ fill: "black" }} xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M560-440q-50 0-85-35t-35-85q0-50 35-85t85-35q50 0 85 35t35 85q0 50-35 85t-85 35ZM280-320q-33 0-56.5-23.5T200-400v-320q0-33 23.5-56.5T280-800h560q33 0 56.5 23.5T920-720v320q0 33-23.5 56.5T840-320H280Zm80-80h400q0-33 23.5-56.5T840-480v-160q-33 0-56.5-23.5T760-720H360q0 33-23.5 56.5T280-640v160q33 0 56.5 23.5T360-400Zm440 240H120q-33 0-56.5-23.5T40-240v-440h80v440h680v80ZM280-400v-320 320Z"/></svg>
                   <p>Balance:</p>
                 </div>
-                <p>N{userData.balance}</p>
+                <p>N{userData[0].balance}</p>
               </div>
             </div>
 
             <div className="walletCont top-flex" id="top-flex">
-              <p>Tickets</p>
-              <div className="ticketsSubCont">
-                <img src="/hero.jpg" />
-                <div className="ticketDetails">
-                  <p>
-                    <b>Ticket No:</b> #AYL434
-                  </p>
-                  <p>
-                    <b>Event Name:</b> AY live in concert - Lagos
-                  </p>
-                  <p>
-                    <b>Price:</b> N4000
-                  </p>
-                  <p>
-                    <b>Date:</b> 2024-06-06
-                  </p>
-                </div>
-              </div>
-
-              <div className="ticketsSubCont">
-                <img src="/hero.jpg" />
-                <div className="ticketDetails">
-                  <p>
-                    <b>Ticket No:</b> #AYL434
-                  </p>
-                  <p>
-                    <b>Event Name:</b> AY live in concert - Lagos
-                  </p>
-                  <p>
-                    <b>Price:</b> N4000
-                  </p>
-                  <p>
-                    <b>Date:</b> 2024-06-06
-                  </p>
-                </div>
-              </div>
-
-              <div className="ticketsSubCont">
-                <img src="/hero.jpg" />
-                <div className="ticketDetails">
-                  <p>
-                    <b>Ticket No:</b> #AYL434
-                  </p>
-                  <p>
-                    <b>Event Name:</b> AY live in concert - Lagos
-                  </p>
-                  <p>
-                    <b>Price:</b> N4000
-                  </p>
-                  <p>
-                    <b>Date:</b> 2024-06-06
-                  </p>
-                </div>
-              </div>
+              <p>{userData[1].length > 1 ? <span>Tickets</span> : <b>Your Tickets:</b> }</p>
+              {
+                userData[1].length > 1 ?
+                userData[1].map(each => {
+                  return  <div className="ticketsSubCont">
+                    <img src={each.flyer} alt="img" />
+                    <div className="ticketDetails">
+                      <p>
+                        <b>Ticket No:</b> #{each.ticketId}
+                      </p>
+                      <p>
+                        <b>Event Name:</b> {each.eventName}
+                      </p>
+                      <p>
+                        <b>Price:</b> N{each.price}
+                      </p>
+                      <p>
+                        <b>Quantity:</b> {each.qty} Ticket(s)
+                      </p>
+                      <p>
+                        <b>Date:</b> {each.datePurchased}
+                      </p>
+                    </div>
+                  </div>
+                }) : <p style={{fontSize: '0.9em'}}>You have not purchased any tickets yet.</p>
+              }
             </div>
           </div>
         </div>
