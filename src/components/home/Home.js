@@ -17,9 +17,9 @@ const Home = () => {
     formData.append('email', "");
 
     const initDB = () => {
-        fetch('https://oseletickets.netlify.app/db-init', GetRequestOptions('GET'))
+        fetch('http://localhost:5000/db-init', GetRequestOptions('GET'))
         .then(res => res.json())
-        .then(data => alert(data))
+        .then(data => alert(data.message))
         .catch(err => alert(err))
       }
     

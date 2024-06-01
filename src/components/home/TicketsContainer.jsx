@@ -33,8 +33,8 @@ function TicketsContainer({ type }) {
         //     price: { regular: '2000', vip: '4000', vvip: '6000', table: '10000' },
         //     rating: 7,
         //   }]
-        
-    fetch('https://osele-tickets-server.onrender.com/get-all-events', GetRequestOptions("GET"))
+        // https://osele-tickets-server.onrender.com
+  fetch('http://localhost:5000/get-all-events', GetRequestOptions("GET"))
     .then(res => res.text())
     .then(data => {
       if (type === "All Events") {

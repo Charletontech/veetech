@@ -10,7 +10,6 @@ const formData = {
   dob: "",
   gender: "male",
   type: "customer"
-  // password:''
 };
 
 const Signup = () => {
@@ -59,7 +58,8 @@ const Signup = () => {
   }
 
 
-  function submitForm() {
+  function submitForm(e) {
+   
     //validation for empty fields
     for (const key in formData) {
       if (Object.hasOwnProperty.call(formData, key)) {
@@ -125,6 +125,8 @@ const Signup = () => {
     }
 
     function indicateSignupSuccess() {
+      e.target.innerHTML = "Submit";
+      e.target.disabled = false;
       nextField()
       const Toast = Swal.mixin({
         toast: true,
@@ -143,10 +145,52 @@ const Signup = () => {
         text: "You have been successfully signed up. You may now proceed to login. Your date of birth is your password.",
       });
     }
+
+
+    // indicate failed sign up
+    function indicateFailedSignUp() {
+      e.target.innerHTML = "Submit";
+      e.target.disabled = false;
+      const Toast = Swal.mixin({
+        toast: true,
+        position: "top",
+        showConfirmButton: true,
+        timer: 10000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.onmouseenter = Swal.stopTimer;
+          toast.onmouseleave = Swal.resumeTimer;
+        }
+      });
+      Toast.fire({
+        icon: "error",
+        title: "Request Failed!",
+        text: "An error ocurred while Creating your account.",
+      });
+    }
+
+     //indicate that request is processing to user
+     e.target.innerHTML = "Processing...";
+     e.target.disabled = true;
+     const Toast = Swal.mixin({
+       toast: true,
+       position: "top",
+       showConfirmButton: false,
+       didOpen: (toast) => {
+         toast.onmouseenter = Swal.stopTimer;
+         toast.onmouseleave = Swal.resumeTimer;
+       },
+     });
+     Toast.fire({
+       icon: "info",
+       title: "Hold on",
+       text: "Please hold on, we are creating your account...",
+     });
+ 
     
     fetch('https://osele-tickets-server.onrender.com/signup', FetchRequestOptions('POST', formData))
-    .then(res => res.ok ? indicateSignupSuccess() : alert('Failed'))
-    .catch(err => console.error(err))
+    .then(res => res.ok ? indicateSignupSuccess() : indicateFailedSignUp())
+    .catch(err => {console.error(err); indicateFailedSignUp()})
   }
   
 
@@ -241,28 +285,12 @@ const Signup = () => {
             </select>
             <div className='btnCont'>
               <button type='button' onClick={() => {prevField()}}>Back</button>
-              <button className='submitBtn' type='button' onClick={() => {submitForm()}}>Submit</button>
+              <button className='submitBtn' type='button' onClick={(e) => {submitForm(e)}}>Submit</button>
             </div>
           </div>      
     )
   }
 
-  
-
-
-  // var Form3 = () => {
-  //   return (
-  //         <div className='group'>
-  //           <label htmlFor='pWord'>Password</label>
-  //           <input onChange={(e) => {extractInput(2, e.target.value)}} type='pWord' name='pWord' placeholder='John Doe' />
-  //           <div className='btnCont'>
-  //             <button type='button' onClick={() => {prevField()}}>Back</button>
-  //             <button className='submitBtn' type='button' onClick={() => {submitForm()}}>Submit</button>
-  //           </div>
-  //         </div>
-      
-  //   )
-  // }
 
   var fields = [<Form1 />, <Form2 />, <Form3 />, <Form4 />, <Form5 />, <Form6 /> ]
 

@@ -8,7 +8,6 @@
 .navBg{
     backdrop-filter: blur(3.5px);
     background-color: rgba(48, 45, 45, 0.2);
-    /* background-color: rgba(0, 0, 0, 0.3); */
     width: 100%;
     height: 5rem;
     position: relative;
@@ -416,6 +415,89 @@ nav ul li a:hover{
    width: 100%;
    overflow-x: auto;
 }
+
+/* event detail modal */
+.homeEventDetailModal{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: white;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(255, 255, 255, 0.8);
+}
+
+.homeEventDetailsCont{
+    background-color: white;
+    width: 100%;
+    height: 100%;
+    padding: 1.5rem;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+
+#homeModalImg{
+    height: 100%;
+    border-radius: none;
+}
+
+.closeHomeModal{
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    width: auto;
+    height: 1.7rem;
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 6px;
+}
+
+.modalSideA h4{
+    font-weight: 600;
+    font-size: 1em;
+    text-align: center;
+    text-transform: uppercase;
+    color:white;
+    position: absolute;
+    bottom: 0.5rem;
+    width: 120%;
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+.modalSideA{
+    width: 100%;
+    height: 90%;
+    position: relative;
+    overflow: hidden;
+}
+
+.modalSideB{
+    margin-top: 12px;
+    width: 100%;
+    height: 100%;
+    background-color: white;
+    transform: translateY(0);
+    font-size: 0.9em;
+    transition: 1s ease;
+}
+
+.modalSideB h4{
+    margin-bottom: -2.5rem;
+    color: var(--pink);
+}
+
+
+.see-more-cont{
+    text-align: center;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    font-size: 1rem;
+}
+
 
 /* All events */
 #events{

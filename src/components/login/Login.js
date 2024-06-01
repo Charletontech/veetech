@@ -77,8 +77,8 @@ function Login() {
     }
 
     //send login request
-    // https://osele-tickets-server.onrender.com/login
-    fetch('https://osele-tickets-server.onrender.com/login', FetchRequestOptions('POST', formData))
+    // https://osele-tickets-server.onrender.com
+    fetch('http://localhost:5000/login', FetchRequestOptions('POST', formData))
     .then(res => res.json()
     .then( res.status === 200 ? indicateLoginSuccess() : indicateLoginFailed())
     )
@@ -91,7 +91,7 @@ function Login() {
         setIsLoggedIn(true)
         navigate('/dashboard');
         //save user id to browser localStorage 
-        localStorage.setItem('oseleTicketsUser', JSON.stringify({user: data.phone}))
+        localStorage.setItem('oseleTicketsUser', JSON.stringify({user: data[0].phone}))
       }
 
     })

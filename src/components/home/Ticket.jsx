@@ -2,11 +2,18 @@ import React from 'react'
 import { useState, useContext} from 'react'
 import { CartContext } from '../../App'; 
 import Swal from "sweetalert2";
+import EventDetailModal from './EventDetailModal';
 
 function Ticket({tickets, products}) {
     var {cart, setCart, calcTotal} = useContext(CartContext);
     var [showTicketTypes, setShowTicketTypes] = useState(false);
     var [reloadPage, setReloadPage] = useState(false);
+    var [displayEventDetailsModal, setDisplayEventDetailsModal] = useState(false)
+
+    const displayEventDetail = () => {
+      setDisplayEventDetailsModal(!displayEventDetailsModal)
+    }
+    
 
     const addToCart = (prodId, price) => {
         let itemExists = cart.find( product => product.id === prodId && product.price === price) 
@@ -48,7 +55,8 @@ function Ticket({tickets, products}) {
       calcTotal()
   return (
     <div className="eventCont" key={tickets.id}>
-        <img src={products? tickets.flyer : ""} alt="" />
+        { displayEventDetailsModal? <EventDetailModal tickets={tickets} setDisplayEventDetailsModal={setDisplayEventDetailsModal} displayEventDetailsModal={displayEventDetailsModal} /> : <span></span>}
+        <img src={products? tickets.flyer : ""} alt="img" onClick={ () => {displayEventDetail(tickets)}}/>
         <div className="cartIcon-ticketType-cont">
         <div className={"ticketType" + (showTicketTypes ? " showTicket" : "")} >
             <div className="ticket" onClick={products? () => addToCart(tickets.id, JSON.parse(tickets.ticketPrices)[0].regular) : alert('loading tickets')}>
