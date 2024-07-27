@@ -1,0 +1,32 @@
+.App {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.fade-enter {
+  position: absolute;
+  width: 100%;
+  transform: translateX(100%);
+  opacity: 0;
+}
+
+.fade-enter-active {
+  transform: translateX(0%);
+  opacity: 1;
+  transition: transform 600ms ease-in-out, opacity 600ms ease-in-out;
+}
+
+.fade-exit {
+  position: absolute;
+  width: 100%;
+  transform: translateX(0%);
+  opacity: 1;
+}
+
+.fade-exit-active {
+  transform: translateX(-100%);
+  opacity: 0;
+  transition: transform 300ms ease-in-out, opacity 300ms ease-in-out;
+}
