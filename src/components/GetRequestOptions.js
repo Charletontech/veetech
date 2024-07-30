@@ -2,7 +2,7 @@ const GetRequestOptions = (METHOD) => {
     var options = {
         method: `${METHOD}`,
         headers: new Headers({
-            'Authorization': `Bearer ${process.env.REACT_APP_SECURITY_KEY}`,
+            'Authorization': `Bearer ${process.env.REACT_APP_ACCESSKEY}`,
         }),
         credentials: 'include',
     }
