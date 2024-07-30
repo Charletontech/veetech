@@ -2,7 +2,7 @@ const FetchRequestOptions = (METHOD, BODY) => {
     var options = {
         method: `${METHOD}`,
         headers: new Headers({
-            'Authorization': `Bearer 123`,
+            'Authorization': `Bearer ${PROCESS.ENV.REACT_APP_ACCESSKEY}`,
             'Content-Type': 'application/JSON'
         }),
         body: JSON.stringify(BODY)
