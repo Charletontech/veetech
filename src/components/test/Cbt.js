@@ -1,7 +1,6 @@
-import { useState, useContext, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
 import Navbar from "../home/Navbar";
-import { useNavigate } from "react-router-dom";
-import { MainContext } from "../../App";
+import { useNavigate, useLocation } from "react-router-dom";
 import Swal from "sweetalert2";
 
 // Sweetalert Custom alert
@@ -25,9 +24,11 @@ function customAlert(title, message, icon) {
 }
 
 const Cbt = () => {
-  const { examPaper } = useContext(MainContext);
+  // const { examPaper } = useContext(MainContext);
   const navigate = useNavigate();
-  console.log(examPaper);
+  const location = useLocation();
+  const { data } = location.state;
+  let examPaper = data;
 
   // Default values (structured to prevent accessing properties of undefined)
   const subjectsList = examPaper?.examInfo?.subjects
@@ -64,7 +65,6 @@ const Cbt = () => {
   );
 
   useEffect(() => {
-    // setSelectedOption("");
     if (timeRemaining <= 0) {
       // Submit exam automatically when time is up
       navigate("/result", { state: { resultSheet } });
@@ -181,17 +181,18 @@ const Cbt = () => {
     console.log(
       `answered: ${answeredQuestions.length} \n total score: ${totalScore}`
     );
+    setSelectedOption("");
   };
 
-  const previousQuestion = () => {
-    if (currentQuestionIndex > 0) {
-      setCurrentQuestionIndex((prevIndex) => prevIndex - 1);
-    }
-    scoreAnswer();
-    console.log(
-      `answered: ${answeredQuestions.length} \n total score: ${totalScore}`
-    );
-  };
+  // const previousQuestion = () => {
+  //   if (currentQuestionIndex > 0) {
+  //     setCurrentQuestionIndex((prevIndex) => prevIndex - 1);
+  //   }
+  //   scoreAnswer();
+  //   console.log(
+  //     `answered: ${answeredQuestions.length} \n total score: ${totalScore}`
+  //   );
+  // };
 
   // manually submit exam
   const submitExam = () => {
@@ -216,8 +217,6 @@ const Cbt = () => {
 
     // send result to result page and navigate there
     navigate("/result", { state: { resultSheet } });
-
-    console.log(resultSheet);
   }
 
   // Preloader screen
@@ -290,12 +289,12 @@ const Cbt = () => {
         </div>
 
         <div className="buttonsContainer">
-          <button
+          {/* <button
             onClick={previousQuestion}
             disabled={currentQuestionIndex === 0}
           >
             Previous
-          </button>
+          </button> */}
           <button onClick={submitExam}>Submit exam</button>
           <button onClick={nextQuestion}>Next</button>
         </div>
