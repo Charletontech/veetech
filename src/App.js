@@ -59,7 +59,6 @@ const AppWrapper = () => {
   const [examType, setExamType] = useState("");
   const [noOfSubjects, setNoOfSubjects] = useState(0);
   const [setupFormData, SetSetupFormData] = useState({});
-  const [examPaper, setExamPaper] = useState([]);
   return (
     <MainContext.Provider
       value={{
@@ -69,8 +68,6 @@ const AppWrapper = () => {
         setNoOfSubjects,
         setupFormData,
         SetSetupFormData,
-        examPaper,
-        setExamPaper,
       }}
     >
       <Router>
