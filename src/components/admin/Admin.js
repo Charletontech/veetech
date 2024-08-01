@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 import GetRequestOptions from "../GetRequestOptions";
+import FetchRequestOptions from "../FetchRequestOptions";
 import Navbar from "../home/Navbar";
 import "./Admin.css";
 
@@ -26,10 +27,14 @@ function customAlert(title, message, icon) {
 }
 
 let inputKey = "";
+let tokenRequestData = {
+  exam: "JAMB",
+  numberOfTokens: 1,
+};
 
 const Admin = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [newToken, setNewToken] = useState("Your token will appear here.");
+  const [newToken, setNewToken] = useState(["Your token will appear here."]);
   const [allTokensData, setAllTokensData] = useState([]);
 
   useEffect(() => {
@@ -39,7 +44,7 @@ const Admin = () => {
         return res.json();
       })
       .then((data) => {
-        setAllTokensData(data);
+        setAllTokensData(data.reverse());
       })
       .catch((err) => {
         console.log(`error ocurred fetching all tokens from DB: ${err}`);
@@ -48,7 +53,10 @@ const Admin = () => {
 
   const getToken = () => {
     try {
-      fetch("http://localhost:5000/api/get-token", GetRequestOptions("get"))
+      fetch(
+        "http://localhost:5000/api/get-token",
+        FetchRequestOptions("post", tokenRequestData)
+      )
         .then((res) => {
           if (!res.ok) throw new Error();
           return res.json();
@@ -56,8 +64,8 @@ const Admin = () => {
         .then((data) => {
           setNewToken(data);
           customAlert(
-            "Token Success",
-            `You have successfully generated an exam token. Your token is ${data}. This token can only be used once.`,
+            "Success!",
+            `Token generation successful. You generated ${data.length} tokens(s).`,
             "success"
           );
         })
@@ -75,6 +83,15 @@ const Admin = () => {
     }
   };
 
+  // update request token form
+  function updateRequestTokenData(e, id) {
+    if (id === 1) {
+      tokenRequestData.exam = e.target.value;
+    } else if (id === 2) {
+      tokenRequestData.numberOfTokens = parseInt(e.target.value);
+    }
+  }
+
   const login = () => {
     accessKey === inputKey
       ? setIsLoggedIn(!isLoggedIn)
@@ -89,13 +106,43 @@ const Admin = () => {
           <h2>Welcome Admin!</h2>
           <br />
           <p>
-            <b>New Token: </b>
-            {newToken}
+            <b>New Token(s): </b>
+            {newToken.map((each, index) => {
+              return (
+                <span>
+                  {index + 1}. {each}, <br />{" "}
+                </span>
+              );
+            })}
           </p>
           <br />
-          <button class="status new" onClick={getToken}>
-            Generate token
-          </button>
+
+          <form
+            className="generateTokenForm"
+            onSubmit={(e) => {
+              return e.preventDefault();
+            }}
+          >
+            <div>
+              <label>Exam</label>
+              <select onChange={(e) => updateRequestTokenData(e, 1)}>
+                <option value="JAMB">JAMB(UTME)</option>
+                <option value="WAEC">WAEC</option>
+              </select>
+            </div>
+
+            <div>
+              <label>Number of tokens</label>
+              <input
+                type="number"
+                onChange={(e) => updateRequestTokenData(e, 2)}
+              />
+            </div>
+            <button class="status new" onClick={getToken}>
+              Generate token
+            </button>
+          </form>
+
           {allTokensData.length === 0 ? (
             <p>Fetching all tokens from database...</p>
           ) : (
@@ -106,6 +153,7 @@ const Admin = () => {
                     <th>Date Created</th>
                     <th>Token</th>
                     <th>Status</th>
+                    <th>Exam</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -125,6 +173,7 @@ const Admin = () => {
                             {each.status}
                           </span>
                         </td>
+                        <td>{each.examType}</td>
                       </tr>
                     );
                   })}

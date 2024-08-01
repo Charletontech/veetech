@@ -15,7 +15,6 @@ var examData = {
 
 const SetUpForm = () => {
   const { examType, noOfSubjects } = useContext(MainContext);
-  const { setExamPaper } = useContext(MainContext);
   useEffect(() => {
     examData.examType = examType;
   });
@@ -207,31 +206,27 @@ const SetUpForm = () => {
     // send exam data to server: verify access token
     try {
       fetch(
-        "http://localhost:5000/api/verify-exam-access",
+        "https://veetech.onrender.com/api/verify-exam-access",
         FetchRequestOptions("post", examData)
       )
         .then((res) => {
-          if (res.status === 200) {
-            customAlert("Success", "Exam started, Goodluck!", "success");
-            // set login time for unlocking CBT route for 3 hours
-            localStorage.setItem("loginTime", new Date().getTime());
-            navigate("/cbt");
-          } else if (res.status === 401) {
+          if (res.status !== 200) {
+            setButtonText("Start exam");
+            e.disabled = false;
             customAlert(
-              "Invalid Access Token",
-              "Please provide a valid access token",
+              "Token verification failed",
+              "Please provide a valid/unused access token. Ensure the access token matches the exam selected",
               "error"
             );
-          } else {
-            throw new Error("Request not successful");
+            throw new Error("Token verification failed");
           }
 
-          setButtonText("Start exam");
-          e.disabled = false;
           return res.json();
         })
         .then((data) => {
-          setExamPaper(data);
+          // set login time for unlocking CBT route for 3 hours
+          localStorage.setItem("loginTime", new Date().getTime());
+          navigate("/cbt", { state: { data } });
         });
     } catch (err) {
       customAlert(

@@ -1,14 +1,15 @@
 .table-container {
-  width: 95%;
+  width: 99%;
   max-width: 1000px;
   background: #fff;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
-  overflow: hidden;
+  overflow: scroll;
   margin-top: 1.5rem;
 }
 
 table {
+  overflow: scroll;
   width: 100%;
   border-collapse: collapse;
 }
@@ -50,4 +51,29 @@ tr:hover {
 
 .status.pending {
   background-color: #ff9800;
+}
+
+.generateTokenForm {
+  width: 18rem;
+  height: auto;
+  padding: 13px;
+  background-color: white;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+}
+
+.generateTokenForm div {
+  display: flex;
+  gap: 5px;
+  flex-direction: column;
+  margin-bottom: 1rem;
+}
+
+.generateTokenForm input,
+select {
+  width: 100%;
+  background-color: white;
+  border: 1px solid #ddd;
+  padding: 5px;
+  border-radius: 5px;
 }

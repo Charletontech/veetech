@@ -1,6 +1,5 @@
 import React from "react";
 import Navbar from "./Navbar";
-import GetRequestOptions from "../GetRequestOptions";
 import styled from "styled-components";
 import "./Home.css";
 import Swal from "sweetalert2";
@@ -73,7 +72,7 @@ const AccessTokenForm = () => {
       toast: true,
       position: "top",
       showConfirmButton: true,
-      // timer: 15000,
+      timer: 5000,
       timerProgressBar: true,
       didOpen: (toast) => {
         toast.onmouseenter = Swal.stopTimer;
@@ -87,31 +86,17 @@ const AccessTokenForm = () => {
     });
   }
 
-  const getToken = () => {
-    try {
-      fetch("http://localhost:5000/api/get-token", GetRequestOptions("get"))
-        .then((res) => {
-          if (!res.ok) throw new Error();
-          return res.json();
-        })
-        .then((data) =>
-          customAlert(
-            "Token Success",
-            `You have successfully generated an exam token. Your token is ${data}. This token can only be used once.`,
-            "success"
-          )
-        )
-        .catch((err) => {
-          customAlert("Oops!", "an error ocurred, try again please.", "error");
-          console.log(err);
-        });
-    } catch (err) {
-      customAlert(
-        "Oops!",
-        "an error ocurred, this could be due to network issues, try again please.",
-        "error"
-      );
-      console.log(err);
+  const getToken = (e, examIndex) => {
+    customAlert(
+      "Redirecting",
+      "Please wait, we are taking you to payment page",
+      "info"
+    );
+    e.innerHTML = "Please wait...";
+    if (examIndex === 1) {
+      window.location.href = "https://paystack.com/pay/804uofhh3t";
+    } else if (examIndex === 2) {
+      window.location.href = "https://paystack.com/pay/sa-xi2vb0g";
     }
   };
 
@@ -121,14 +106,21 @@ const AccessTokenForm = () => {
       <Container>
         <Heading>Quick steps</Heading>
         <Message>
-          Click on the "Get Token" button below,
+          Click on the "Get Token" button below for your exam of choice,
           <br />
-          Make payment (Each access token costs N200),
+          You will be taken to payment page to make payment,
           <br />
           Get redirected to our agent on WhatsApp to get your Token.
           <br />
         </Message>
-        <SubmitButton onClick={getToken}>Get Token</SubmitButton>
+        <div style={{ display: "flex", gap: "7px" }}>
+          <SubmitButton onClick={(e) => getToken(e, 1)}>
+            Get JAMB Token
+          </SubmitButton>
+          <SubmitButton onClick={(e) => getToken(e, 2)}>
+            Get WAEC Token
+          </SubmitButton>
+        </div>
       </Container>
     </div>
   );
