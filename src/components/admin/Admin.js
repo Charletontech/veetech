@@ -54,7 +54,7 @@ const Admin = () => {
   const getToken = () => {
     try {
       fetch(
-        "http://localhost:5000/api/get-token",
+        "https://veetech.onrender.com/api/get-token",
         FetchRequestOptions("post", tokenRequestData)
       )
         .then((res) => {
