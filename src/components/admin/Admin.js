@@ -38,7 +38,7 @@ const Admin = () => {
   const [allTokensData, setAllTokensData] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/get-all-tokens", GetRequestOptions("get"))
+    fetch("https://veetech-server.onrender.com/api/get-all-tokens", GetRequestOptions("get"))
       .then((res) => {
         if (!res.ok) throw new Error();
         return res.json();
