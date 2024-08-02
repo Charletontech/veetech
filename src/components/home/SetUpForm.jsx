@@ -206,7 +206,7 @@ const SetUpForm = () => {
     // send exam data to server: verify access token
     try {
       fetch(
-        "https://veetech.onrender.com/api/verify-exam-access",
+        "https://veetech-server.onrender.com/api/verify-exam-access",
         FetchRequestOptions("post", examData)
       )
         .then((res) => {
