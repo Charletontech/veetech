@@ -1,16 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 import Navbar from "./Navbar";
 import styled from "styled-components";
 import "./Home.css";
 import Swal from "sweetalert2";
+import FetchRequestOptions from "../FetchRequestOptions";
+import { PaystackButton } from "react-paystack";
 
 const Container = styled.div`
   font-family: Arial, sans-serif;
   padding: 20px;
-  background-color: #f5f5f5;
   border-radius: 10px;
-  width: 400px;
+  width: 90%;
+  max-width: 380px;
   margin: auto;
+  margin-bottom: 1rem;
+  background-color: white;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 `;
 
@@ -65,38 +69,102 @@ const SubmitButton = styled.button`
   }
 `;
 
+// style form
+const Form = styled.form`
+  max-width: 380px;
+  width: 100%;
+  padding: 6px;
+  display: flex;
+  gap: 5px;
+  flex-direction: column;
+  background: white;
+  margin: auto;
+`;
+const Input = styled.input`
+  width: 100%;
+  background-color: white;
+  padding: 12px 18px;
+  border-radius: 6px;
+  margin-bottom: 6px;
+  border: 1px solid #ddd;
+`;
+
 const AccessTokenForm = () => {
+  // main code area
+
+  const publicKey = process.env.REACT_APP_PAYSTACK_PUBLIC_KEY;
+  const [amount, setAmount] = useState(0);
+  const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [exam, setExam] = useState("");
+  const [showForm, setShowForm] = useState(false);
+
+  const resetForm = () => {
+    setEmail("");
+    setName("");
+    setPhone("");
+    setAmount(0);
+  };
+
+  const componentProps = {
+    email,
+    amount: amount * 100,
+    metadata: {
+      name,
+      phone,
+    },
+    publicKey,
+    text: "Get token",
+    onSuccess: ({ reference }) => {
+      customAlert(
+        "Payment successful!",
+        `Transaction reference: ${reference}. <br> Please wait while we generate your access token. This might take a little while. Please do not leave this page...`,
+        "info"
+      );
+      const generateTokenUrl = process.env.REACT_APP_GENERATE_TOKEN_URL;
+      fetch(
+        generateTokenUrl,
+        FetchRequestOptions("POST", {
+          exam: exam,
+          numberOfTokens: 1,
+        })
+      )
+        .then((res) => {
+          return res.json();
+        })
+        .then((data) => {
+          customAlert(
+            "Access token generated",
+            `You have successfully generated access token. <br> Your ACCESS TOKEN: <b>${data[0]}<b/>. <br> Note: Please save this token somewhere as you may not be able to access it once this page is closed. Thank you.`,
+            "success"
+          );
+        });
+      resetForm();
+    },
+    onClose: () =>
+      customAlert("Awwn...", "Wait! We hate to see you go!!!!", "info"),
+  };
+
   // Sweetalert Custom alert
   function customAlert(title, message, icon) {
-    const Toast = Swal.mixin({
-      toast: true,
-      position: "top",
-      showConfirmButton: true,
-      timer: 5000,
-      timerProgressBar: true,
-      didOpen: (toast) => {
-        toast.onmouseenter = Swal.stopTimer;
-        toast.onmouseleave = Swal.resumeTimer;
-      },
-    });
-    Toast.fire({
-      icon: `${icon}`,
-      title: `${title}`,
-      text: `${message}`,
+    Swal.fire({
+      title: title,
+      html: message,
+      icon: icon,
+      confirmButtonText: "ok",
+      confirmButtonColor: "#69ce7d",
     });
   }
 
   const getToken = (e, examIndex) => {
-    customAlert(
-      "Redirecting",
-      "Please wait, we are taking you to payment page",
-      "info"
-    );
-    e.innerHTML = "Please wait...";
+    setShowForm(true);
     if (examIndex === 1) {
-      window.location.href = "https://paystack.com/pay/804uofhh3t";
+      setExam("JAMB");
+      setAmount(200);
     } else if (examIndex === 2) {
-      window.location.href = "https://paystack.com/pay/sa-xi2vb0g";
+      setExam("WAEC");
+      setAmount(100);
     }
   };
 
@@ -104,23 +172,53 @@ const AccessTokenForm = () => {
     <div className="frame" style={{ background: "var(--bg)" }}>
       <Navbar />
       <Container>
-        <Heading>Quick steps</Heading>
-        <Message>
-          Click on the "Get Token" button below for your exam of choice,
-          <br />
-          You will be taken to payment page to make payment,
-          <br />
-          Get redirected to our agent on WhatsApp to get your Token.
-          <br />
-        </Message>
-        <div style={{ display: "flex", gap: "7px" }}>
-          <SubmitButton onClick={(e) => getToken(e, 1)}>
-            Get JAMB Token
-          </SubmitButton>
-          <SubmitButton onClick={(e) => getToken(e, 2)}>
-            Get WAEC Token
-          </SubmitButton>
+        <div>
+          <Heading>Quick steps</Heading>
+          <Message>
+            1. Select exam token of choice,
+            <br />
+            2. Complete form that will be displayed, click "Get token"
+            <br />
+            3. You will be taken to payment page to make payment
+            <br />
+            4. Your access token will be displayed on screen.
+            <br />
+          </Message>
+          <div style={{ display: "flex", gap: "15px" }}>
+            <SubmitButton onClick={(e) => getToken(e, 1)}>
+              JAMB Token
+            </SubmitButton>
+            <SubmitButton onClick={(e) => getToken(e, 2)}>
+              WAEC Token
+            </SubmitButton>
+          </div>
         </div>
+        <Form
+          style={showForm ? { display: "flex" } : { display: "none" }}
+          onSubmit={(e) => e.preventDefault()}
+        >
+          <Heading style={{ marginTop: "1.5rem", marginBottom: "-0.2rem" }}>
+            Purchase form
+          </Heading>
+          <Input
+            placeholder="Name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          ></Input>
+          <Input
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          ></Input>
+          <Input
+            placeholder="Phone number"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+          ></Input>
+          <Input placeholder={`Exam: ${exam}`} readOnly></Input>
+
+          <PaystackButton className="paystackButtonStyle" {...componentProps} />
+        </Form>
       </Container>
     </div>
   );
