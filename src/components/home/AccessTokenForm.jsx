@@ -125,21 +125,36 @@ const AccessTokenForm = () => {
       const generateTokenUrl = process.env.REACT_APP_GENERATE_TOKEN_URL;
       fetch(
         generateTokenUrl,
-        FetchRequestOptions("POST", {
-          exam: exam,
-          numberOfTokens: 1,
-        })
+        FetchRequestOptions("POST", { exam: exam, numberOfTokens: 1 })
       )
         .then((res) => {
+          if (!res.ok) {
+            return res.json().then((errorData) => {
+              const troubleCode = errorData.troubleCode;
+              customAlert(
+                "Oops!",
+                `An error occurred while we were generating your access token. But not to worry, your payment was received. Send this trouble code ${troubleCode} to us before the end of today (our contact is on the home page). An Admin will send the access token to you directly.`,
+                "error"
+              );
+              throw new Error(
+                "An error occured (status: 500). This might be due to error querying database. Trouble code: ",
+                troubleCode
+              );
+            });
+          }
           return res.json();
         })
         .then((data) => {
           customAlert(
             "Access token generated",
-            `You have successfully generated access token. <br> Your ACCESS TOKEN: <b>${data[0]}<b/>. <br> Note: Please save this token somewhere as you may not be able to access it once this page is closed. Thank you.`,
+            `You have successfully generated an access token. <br> Your ACCESS TOKEN: <b>${data[0]}<b/>. <br> Note: Please save this token somewhere as you may not be able to access it once this page is closed. Thank you.`,
             "success"
           );
+        })
+        .catch((err) => {
+          console.log(err);
         });
+
       resetForm();
     },
     onClose: () =>
