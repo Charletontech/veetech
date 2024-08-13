@@ -40,6 +40,7 @@ const Menu = ({ toggleHomeMenu, setToggleHomeMenu }) => {
         <li onClick={() => navigate("/")}>Home</li>
         <li onClick={() => navigate("/get-access-token")}>Get access token</li>
         <li onClick={() => navigate("/screen3")}>Take an exam</li>
+        <li onClick={() => navigate("/agents")}>Agents</li>
         <li onClick={showContactUsAlert}>Contact us</li>
       </ul>
     </div>
