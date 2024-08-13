@@ -15,6 +15,7 @@ import Cbt from "./components/test/Cbt";
 import AccessTokenForm from "./components/home/AccessTokenForm";
 import PerformanceAnalysis from "./components/test/PerformanceAnalysis";
 import Admin from "./components/admin/Admin";
+import AgentsPaymentPage from "./components/home/AgentsPaymentPage";
 
 export const MainContext = createContext();
 
@@ -47,6 +48,7 @@ const App = () => {
             <Route path="/result" element={<PerformanceAnalysis />} />
             <Route path="/get-access-token" element={<AccessTokenForm />} />
             <Route path="/admin" element={<Admin />} />
+            <Route path="/agents" element={<AgentsPaymentPage />} />
           </Routes>
         </CSSTransition>
       </TransitionGroup>
