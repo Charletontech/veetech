@@ -197,7 +197,11 @@ const Cbt = () => {
   // manually submit exam
   const submitExam = () => {
     scoreAnswer();
-    structureResult();
+    var storeCorrectQuestions = structureCorrectAnswers();
+    var resultSheet = structureResult();
+
+    // send result to result page and navigate there
+    navigate("/result", { state: { resultSheet, storeCorrectQuestions } });
   };
 
   function structureResult() {
@@ -214,9 +218,25 @@ const Cbt = () => {
     for (const [subject, score] of Object.entries(result)) {
       resultSheet.details[subjectsList[subject]] = score;
     }
+    return resultSheet;
+  }
 
-    // send result to result page and navigate there
-    navigate("/result", { state: { resultSheet } });
+  // functionality for showing correct answers after exam
+  function structureCorrectAnswers() {
+    const storeCorrectQuestions = [];
+
+    answeredQuestions.forEach((each) => {
+      var correctQuestionObj = {
+        question: "",
+        correctOption: "",
+        answer: "",
+      };
+      correctQuestionObj.question = each.question;
+      correctQuestionObj.correctOption = each.answer;
+      correctQuestionObj.answer = each.option[`${each.answer}`];
+      storeCorrectQuestions.push(correctQuestionObj);
+    });
+    return storeCorrectQuestions;
   }
 
   // Preloader screen
