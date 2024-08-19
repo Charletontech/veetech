@@ -1,11 +1,13 @@
-import React from "react";
+import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import "../home/Home.css";
 
 const PerformanceAnalysis = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { resultSheet } = location.state;
+  const { resultSheet, storeCorrectQuestions } = location.state;
+
+  const [showAnswers, setShowAnswers] = useState(false);
 
   const totalQuestions = resultSheet.noOfQuestions;
   const totalScore = resultSheet.totalScore;
@@ -77,6 +79,53 @@ const PerformanceAnalysis = () => {
               <b style={{ textTransform: "capitalize" }}>{subject}:</b> {score}
             </p>
           ))}
+          <button onClick={() => setShowAnswers(!showAnswers)}>
+            See answers
+          </button>
+        </div>
+
+        <div
+          className="correctAnswersCont"
+          style={
+            showAnswers
+              ? { zIndex: "2", opacity: "1" }
+              : { zIndex: "-2", opacity: "0" }
+          }
+        >
+          <button
+            className="circle-button"
+            style={{ background: "var(--green", marginLeft: "75vw" }}
+            onClick={() => setShowAnswers(!showAnswers)}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="24px"
+              viewBox="0 -960 960 960"
+              width="24px"
+            >
+              <path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z" />
+            </svg>
+          </button>
+          <h3>Correct Answers</h3>
+          <div>
+            {storeCorrectQuestions.map((each, index) => {
+              return (
+                <div>
+                  <strong>{index + 1}.</strong>
+                  <br />
+                  <p>
+                    <b>Question:</b> <span>{each.question}</span>
+                  </p>
+                  <p>
+                    <b>Answer:</b> <span>{each.answer}</span>
+                  </p>
+                  <p>
+                    <b>Correct option:</b> <span>{each.correctOption}</span>
+                  </p>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
     </div>
